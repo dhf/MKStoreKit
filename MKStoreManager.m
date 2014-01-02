@@ -96,13 +96,13 @@ static MKStoreManager* _sharedStoreManager;
 
 +(BOOL) iCloudAvailable {
   
-  if(NSClassFromString(@"NSUbiquitousKeyValueStore")) { // is iOS 5?
-    
-    if([NSUbiquitousKeyValueStore defaultStore]) {  // is iCloud enabled
-      
-      return YES;
-    }
-  }
+//  if(NSClassFromString(@"NSUbiquitousKeyValueStore")) { // is iOS 5?
+//    
+//    if([NSUbiquitousKeyValueStore defaultStore]) {  // is iCloud enabled
+//      
+//      return YES;
+//    }
+//  }
   
   return NO;
 }
