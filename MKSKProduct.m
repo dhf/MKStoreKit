@@ -41,8 +41,8 @@
 #error "MKStoreKit uses features (NSJSONSerialization) only available in iOS SDK  and later."
 #endif
 
-static void (^onReviewRequestVerificationSucceeded)();
-static void (^onReviewRequestVerificationFailed)();
+static void (^onReviewRequestVerificationSucceeded)(void);
+static void (^onReviewRequestVerificationFailed)(void);
 static NSURLConnection *sConnection;
 static NSMutableData *sDataFromConnection;
 
@@ -154,7 +154,7 @@ static NSMutableData *sDataFromConnection;
     
     NSString *postData = [NSString stringWithFormat:@"productid=%@&udid=%@", productId, uniqueID];
     
-    NSString *length = [NSString stringWithFormat:@"%d", [postData length]];	
+    NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     [theRequest setValue:length forHTTPHeaderField:@"Content-Length"];	
     
     [theRequest setHTTPBody:[postData dataUsingEncoding:NSASCIIStringEncoding]];
@@ -187,7 +187,7 @@ static NSMutableData *sDataFromConnection;
   
 	NSString *postData = [NSString stringWithFormat:@"receiptdata=%@", receiptDataString];
 	
-	NSString *length = [NSString stringWithFormat:@"%d", [postData length]];	
+    NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
 	[theRequest setValue:length forHTTPHeaderField:@"Content-Length"];	
 	
 	[theRequest setHTTPBody:[postData dataUsingEncoding:NSASCIIStringEncoding]];
@@ -247,7 +247,7 @@ didReceiveResponse:(NSURLResponse *)response
   self.dataFromConnection = nil;
   if(self.onReceiptVerificationFailed)
   {
-    self.onReceiptVerificationFailed(nil);
+    self.onReceiptVerificationFailed(error);
     self.onReceiptVerificationFailed = nil;
   }
 }
@@ -285,7 +285,7 @@ didReceiveResponse:(NSURLResponse *)response
   else
   {
     if(onReviewRequestVerificationFailed)
-      onReviewRequestVerificationFailed(nil);
+      onReviewRequestVerificationFailed();
     
     onReviewRequestVerificationFailed = nil;
   }
@@ -300,7 +300,7 @@ didReceiveResponse:(NSURLResponse *)response
   
   if(onReviewRequestVerificationFailed)
   {
-    onReviewRequestVerificationFailed(nil);    
+    onReviewRequestVerificationFailed();
     onReviewRequestVerificationFailed = nil;
   }
 }
